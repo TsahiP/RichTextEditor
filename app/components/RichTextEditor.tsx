@@ -11,12 +11,13 @@ export default function RichTextEditor() {
   const editorRef = useRef<HTMLDivElement>(null);
   const colorInputRef = useRef<HTMLInputElement>(null);
   const [fontSize, setFontSize] = useState<string>("16");
-//   const [isRTL, setIsRTL] = useState<boolean>(true);
+  const [isRTL, _setIsRTL] = useState<boolean>(true);
   const [currentColor, setCurrentColor] = useState<string>("#000000");
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isUnderline, setIsUnderline] = useState(false);
+  const [showDebug, setShowDebug] = useState<boolean>(false);
 
   const execCommand = (command: EditorCommand) => {
     document.execCommand(command.command, false, command.value);
@@ -193,12 +194,6 @@ export default function RichTextEditor() {
     setIsUnderline(document.queryCommandState('underline'));
   };
 
-//   useEffect(() => {
-//     if (editorRef.current) {
-//       editorRef.current.dir = isRTL ? 'rtl' : 'ltr';
-//     }
-//   }, [isRTL]);
-
   useEffect(() => {
     const handleSelectionChange = () => {
       checkFormatting();
@@ -295,6 +290,19 @@ export default function RichTextEditor() {
 
           {/* Right side tools */}
           <div className="flex flex-row-reverse items-center gap-2">
+            {/* Debug button */}
+            <button
+              onClick={() => setShowDebug(!showDebug)}
+              className={`p-1.5 rounded transition-colors ${
+                showDebug 
+                  ? 'bg-gray-200' 
+                  : 'hover:bg-gray-200'
+              }`}
+              title="Show HTML Output"
+            >
+              <span className="text-sm font-mono">{`</>`}</span>
+            </button>
+            
             {/* Color picker */}
             <div className="relative mr-2">
               <button
@@ -377,8 +385,7 @@ export default function RichTextEditor() {
             className={`min-h-[200px] p-4 focus:outline-none ${
               isDragging ? 'bg-blue-50' : ''
             }`}
-            // dir={isRTL ? 'rtl' : 'ltr'}
-            dir='rtl'
+            dir={isRTL ? 'rtl' : 'ltr'}
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
             onDragOver={handleDragOver}
@@ -404,6 +411,16 @@ export default function RichTextEditor() {
             }}
           />
         </div>
+        
+        {/* Debug Output Panel */}
+        {showDebug && (
+          <div className="border-t border-gray-200 p-4">
+            <div className="text-sm font-medium mb-2">HTML Output:</div>
+            <pre className="bg-gray-50 p-3 rounded text-xs font-mono overflow-x-auto whitespace-pre-wrap max-h-60 overflow-y-auto">
+              {editorRef.current?.innerHTML || ''}
+            </pre>
+          </div>
+        )}
       </div>
     </div>
   );
