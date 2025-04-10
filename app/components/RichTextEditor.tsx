@@ -11,7 +11,7 @@ export default function RichTextEditor() {
   const editorRef = useRef<HTMLDivElement>(null);
   const colorInputRef = useRef<HTMLInputElement>(null);
   const [fontSize, setFontSize] = useState<string>("16");
-  const [isRTL, setIsRTL] = useState<boolean>(true);
+//   const [isRTL, setIsRTL] = useState<boolean>(true);
   const [currentColor, setCurrentColor] = useState<string>("#000000");
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [isBold, setIsBold] = useState(false);
@@ -193,11 +193,11 @@ export default function RichTextEditor() {
     setIsUnderline(document.queryCommandState('underline'));
   };
 
-  useEffect(() => {
-    if (editorRef.current) {
-      editorRef.current.dir = isRTL ? 'rtl' : 'ltr';
-    }
-  }, [isRTL]);
+//   useEffect(() => {
+//     if (editorRef.current) {
+//       editorRef.current.dir = isRTL ? 'rtl' : 'ltr';
+//     }
+//   }, [isRTL]);
 
   useEffect(() => {
     const handleSelectionChange = () => {
@@ -345,21 +345,8 @@ export default function RichTextEditor() {
                   </option>
                 ))}
               </select>
-              <span className="mx-1 text-gray-500">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </span>
-            </div>
 
-            {/* RTL/LTR toggle */}
-            <button
-              onClick={() => setIsRTL(!isRTL)}
-              className="p-1.5 hover:bg-gray-200 rounded text-sm"
-              title="Toggle RTL/LTR"
-            >
-              {isRTL ? 'RTL' : 'LTR'}
-            </button>
+            </div>
 
             {/* Image upload */}
             <label className="p-1.5 hover:bg-gray-200 rounded cursor-pointer">
@@ -390,7 +377,8 @@ export default function RichTextEditor() {
             className={`min-h-[200px] p-4 focus:outline-none ${
               isDragging ? 'bg-blue-50' : ''
             }`}
-            dir={isRTL ? 'rtl' : 'ltr'}
+            // dir={isRTL ? 'rtl' : 'ltr'}
+            dir='rtl'
             onDragEnter={handleDragEnter}
             onDragLeave={handleDragLeave}
             onDragOver={handleDragOver}
